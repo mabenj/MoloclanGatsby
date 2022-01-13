@@ -1,0 +1,557 @@
+@import "../../node_modules/bootstrap/scss/bootstrap";
+@import "react-toggle/style.css";
+@import "animate.css/animate.css";
+
+$text-color: hsl(180, 100%, 97%);
+$orange-color: hsl(36, 100%, 55%);
+$carrot-color: hsla(19, 89%, 43%, 0.596);
+$anchor-color-hover: hsl(19, 100%, 50%);
+$dark-orange-color: hsla(36, 100%, 55%, 0.431);
+$light-grey-color: hsl(0, 0%, 67%);
+$grey-color: hsl(0, 0%, 50%);
+$dark-color: hsl(0, 0%, 16%);
+$black-color: hsl(0, 0%, 11%);
+$wrapper-bg-color: hsla(0, 0%, 9%, 0.3);
+$ts-viewer-bg-color: hsla(0, 0%, 29%, 0.514);
+$discord-table-bg-color: hsla(0, 0%, 29%, 0.514);
+$discord-table-bg-color-hover: hsla(0, 0%, 66%, 0.123);
+$sidebar-bg-color: hsla(0, 0%, 11%, 0.925);
+$navigation-dropdown-bg-color: hsla(0, 0%, 11%, 0.925);
+$gallery-caption-color: hsla(180, 100%, 97%, 0.685);
+$gallery-caption-bg-color: hsla(0, 0%, 5%, 0.575);
+$success-color: hsl(144, 100%, 39%);
+$error-color: hsl(0, 100%, 63%);
+$navigation-bg-color: hsla(0, 0%, 9%, 0.863);
+
+$background-image: url("../img/rust_banner.jpg");
+
+$xxl: 1400px;
+$xl: 1200px;
+$lg: 992px;
+$md: 768px;
+$sm: 576px;
+
+// Bootstrap default variable overrides
+$warning: $orange-color;
+
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap");
+
+body {
+	margin: 0;
+	font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+		"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+		"Helvetica Neue", sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	background-image: $background-image;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: 100vw;
+	background-color: $black-color;
+}
+@media (max-width: $lg) {
+	body {
+		background-size: 140vw;
+	}
+}
+
+%headers-shared {
+	font-weight: 800;
+	letter-spacing: 0.05em;
+	word-spacing: 0.2em;
+	text-transform: uppercase;
+	border-left: $orange-color;
+	border-left-style: solid;
+	border-left-width: 3px;
+	padding: 0 0.5rem;
+}
+
+h1 {
+	@extend %headers-shared;
+	font-size: 1.6rem;
+}
+
+h2 {
+	@extend %headers-shared;
+	font-size: 1.5rem;
+}
+
+h3 {
+	@extend %headers-shared;
+	font-size: 1.4rem;
+}
+
+code {
+	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+		monospace;
+	color: $text-color;
+}
+
+.btn-warning,
+.btn-warning:hover,
+.btn-warning:active,
+.btn-primary:visited {
+	background-color: $orange-color !important;
+}
+
+.nav-bar-mobile {
+	width: 100vw;
+	display: flex;
+	align-items: center;
+	padding-bottom: 30px;
+	transition: height 0.5s;
+}
+
+.nav-bar-mobile-opened {
+	min-height: 100vh;
+	height: 100%;
+	overflow-y: scroll;
+	background: $navigation-bg-color;
+	transition: height 0.2s;
+	backdrop-filter: blur(5px);
+}
+
+.nav-bar-mobile-closed {
+	height: 90px;
+	background: linear-gradient(
+		$navigation-bg-color,
+		60%,
+		rgba($navigation-bg-color, 0)
+	);
+}
+
+.nav-bar-mobile-head {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+}
+
+.nav-bar-mobile-link {
+	display: inline-block;
+	width: 100%;
+	border-bottom: 1px solid rgba($text-color, 0.2);
+
+	.nav-bar-mobile-link-header {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		.nav-bar-mobile-link-caret {
+			color: $text-color;
+			font-size: 1.8rem;
+		}
+	}
+}
+
+.nav-bar-mobile-link.first {
+	border-top: 1px solid rgba($text-color, 0.2);
+}
+
+.navigation-bar {
+	background: linear-gradient(
+		$navigation-bg-color,
+		60%,
+		rgba($navigation-bg-color, 0)
+	);
+	width: 100vw;
+	display: flex;
+	align-items: center;
+	padding-bottom: 30px;
+}
+
+.navigation-bar-middle {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+}
+
+.navigation-links {
+	display: flex;
+	align-items: baseline;
+
+	.navigation-link {
+		color: $light-grey-color;
+		margin: 0 10px;
+
+		.navigation-link-caret {
+			font-size: 0.5rem;
+			vertical-align: middle;
+			margin-left: 5px;
+		}
+	}
+
+	.navigation-link.active {
+		color: $orange-color;
+
+		.navigation-link-text {
+			/* Top only */
+			/* box-shadow: inset 0px 2px 0px -1px $orange-color; */
+			/* Bottom only */
+			box-shadow: inset 0px -2px 0px -1px $orange-color;
+		}
+	}
+}
+
+.navigation-link:hover {
+	color: $orange-color !important;
+	text-decoration: none;
+}
+
+$mobile-bar-height: 70px;
+.navigation-bar-mobile {
+	min-height: $mobile-bar-height;
+	background: $dark-color;
+
+	.navigation-link {
+		color: $light-grey-color !important;
+		padding: 10px 20px;
+	}
+}
+
+.navbar-brand {
+	font-size: 2rem;
+	color: $text-color;
+}
+
+.navbar-brand:hover {
+	color: $text-color;
+}
+
+.sidebar {
+	display: flex;
+	height: 100%;
+}
+
+.menu-button {
+	/* Reset the button styling */
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+
+	width: 60px;
+	height: 60px;
+	font-size: 2rem;
+	color: $orange-color;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.menu-button:hover {
+	cursor: pointer;
+	color: darken($orange-color, 10%);
+}
+
+.sidebar-content {
+	width: 0;
+	height: 100%;
+	background-color: $sidebar-bg-color;
+	position: fixed;
+	top: 0;
+	left: 0;
+	transition: width 200ms;
+
+	ul {
+		padding-top: 15px;
+		overflow: hidden;
+
+		li {
+			line-height: 60px;
+			list-style: none;
+
+			span,
+			a {
+				display: block;
+				height: 60px;
+				padding: 0 10px;
+				text-decoration: none;
+				text-transform: none;
+				color: $text-color;
+				font-size: 1rem;
+				white-space: nowrap;
+			}
+
+			span {
+				color: $grey-color;
+				font-size: 1.2rem;
+			}
+		}
+	}
+}
+
+.front-page-image {
+	width: 80%;
+}
+@media (max-width: $lg) {
+	.front-page-image {
+		width: 100%;
+	}
+}
+
+.footer-main {
+	background-color: $dark-color;
+}
+
+.footer-main,
+main {
+	a {
+		color: $orange-color;
+	}
+
+	a:hover {
+		color: $anchor-color-hover;
+	}
+}
+
+.wrapper {
+	margin: 100px 0;
+	width: 100%;
+	background-color: $wrapper-bg-color;
+	padding: 50px 80px;
+	color: $text-color;
+	border-style: solid;
+	border-image: linear-gradient($dark-orange-color, transparent) 1;
+	border-image-width: 1px;
+	border-bottom: 0;
+	border-radius: 0 0 10px 10px;
+
+	p {
+		text-align: justify;
+	}
+}
+@media (max-width: $lg) {
+	.wrapper {
+		padding: 30px 10px;
+		margin: 110px 0;
+
+		p {
+			text-align: initial;
+		}
+	}
+}
+
+.back-blur {
+	backdrop-filter: blur(5px);
+	transition: backdrop-filter 1500ms;
+}
+
+.TSViewer {
+	background-color: $ts-viewer-bg-color;
+	padding: 30px;
+	border-radius: 5px;
+}
+
+.server-info {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	a {
+		color: $text-color;
+	}
+
+	a:hover {
+		color: $orange-color;
+	}
+}
+
+.custom-btn {
+	color: $orange-color !important;
+}
+
+.jari-quote {
+	transition: all 200ms ease;
+}
+
+.jari-quote:hover {
+	transform: scale(1.1);
+}
+
+%gallery-caption {
+	position: absolute;
+	background-color: $gallery-caption-bg-color;
+	color: $gallery-caption-color;
+	padding-left: 5px;
+	padding-right: 5px;
+	border-radius: 0.25rem;
+}
+
+.gallery-video-caption {
+	@extend %gallery-caption;
+	top: 6%;
+	left: 6%;
+	transition: opacity 500ms;
+}
+
+.gallery-section-list-item,
+.gallery-section-list-item.active {
+	background-color: transparent !important;
+}
+
+.gallery-tilty {
+	transform-style: preserve-3d;
+
+	img:hover {
+		cursor: pointer;
+	}
+
+	.gallery-tilty-inner {
+		@extend %gallery-caption;
+		transform: translateZ(40px);
+		bottom: 6%;
+		left: 6%;
+	}
+}
+
+.discord-table {
+	background-color: $discord-table-bg-color;
+	color: $text-color;
+
+	th,
+	td {
+		text-align: initial;
+		word-wrap: break-word;
+		max-width: 150px;
+	}
+
+	tr:hover {
+		td {
+			background-color: $discord-table-bg-color-hover !important;
+		}
+	}
+}
+
+.text-color {
+	color: $text-color;
+}
+
+.success-color {
+	color: $success-color;
+}
+
+.error-color {
+	color: $error-color;
+}
+
+.orange-color {
+	color: $orange-color;
+}
+
+.orange-color-hover:hover {
+	color: $orange-color;
+}
+
+.dark-orange-color {
+	color: $dark-orange-color;
+}
+
+.light-grey-color {
+	color: $light-grey-color;
+}
+
+.orange-toggle {
+	.react-toggle-track {
+		background-color: $black-color;
+	}
+
+	.react-toggle--checked .react-toggle-track {
+		background-color: $orange-color;
+	}
+
+	.react-toggle--checked:hover:not(.react-toggle--disabled)
+		.react-toggle-track {
+		background-color: darken($orange-color, 10%);
+	}
+
+	.react-toggle--checked .react-toggle-thumb {
+		border-color: $orange-color;
+	}
+
+	.react-toggle--focus .react-toggle-thumb {
+		box-shadow: none;
+	}
+
+	.react-toggle:active:not(.react-toggle--disabled) .react-toggle-thumb {
+		box-shadow: none;
+	}
+}
+
+.dropdown {
+	position: relative;
+}
+
+.dropdown:hover {
+	.dropdown-content {
+		display: block;
+	}
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: $navigation-dropdown-bg-color;
+	border-radius: 0 0 7px 7px;
+	overflow: hidden;
+	font-size: 0.9rem;
+	ul {
+		margin: 0;
+		padding: 0;
+	}
+
+	li {
+		white-space: nowrap;
+		padding: 0 15px;
+
+		a {
+			display: block;
+			padding: 15px 5px;
+			color: $text-color;
+			text-decoration: none;
+			border-top: 1px solid rgba($text-color, 0.2);
+		}
+
+		a.first {
+			border-top: none;
+		}
+
+		a:hover {
+			color: $orange-color;
+		}
+	}
+}
+
+/* ########### Hover.css begin ########### */
+
+/* Bounce To Right */
+.hvr-bounce-to-right {
+	display: block;
+	transform: perspective(1px) translateZ(0);
+	box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+	position: relative;
+	transition-property: color;
+	transition-duration: 0.5s;
+}
+.hvr-bounce-to-right:before {
+	content: "";
+	position: absolute;
+	z-index: -1;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: $dark-color;
+	transform: scaleX(0);
+	transform-origin: 0 50%;
+	transition-property: transform;
+	transition-duration: 0.5s;
+	transition-timing-function: ease-out;
+}
+.hvr-bounce-to-right:hover:before {
+	transform: scaleX(1);
+	transition-timing-function: cubic-bezier(0.52, 1.64, 0.37, 0.66);
+}

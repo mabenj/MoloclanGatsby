@@ -1,0 +1,118 @@
+$background-url: "https://i.imgur.com/gbizRgN.png";
+$hover-scale-bg: 1.1;
+$hover-scale-avatar: 1.2;
+$fav-icon-bg: hsla(0, 0%, 100%, 0.418);
+$playerlist-bg: hsla(0, 0%, 35%, 0.514);
+$avatar-bg-shadow: rgba(0, 0, 0, 0.521);
+$playerlist-height: 190px;
+$bg-container-height: 225px;
+$fav-icon-height: 80px;
+
+$xxl: 1400px;
+$xl: 1200px;
+$lg: 992px;
+$md: 768px;
+$sm: 576px;
+
+.mc-container {
+	width: 100%;
+	background-color: transparent;
+	overflow: hidden;
+	position: relative;
+}
+
+.mc-bg-container {
+	overflow: hidden;
+	height: $bg-container-height;
+
+	.mc-bg-image {
+		// background-image: url($background-url);
+		background-size: cover;
+		background-repeat: no-repeat;
+		height: 100%;
+		width: 100%;
+		transition: all 200ms ease;
+	}
+}
+
+.mc-bg-container:hover {
+	cursor: pointer;
+
+	.mc-bg-image {
+		transform: scale($hover-scale-bg);
+	}
+}
+
+.mc-title {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+	position: absolute;
+	// bottom: $playerlist-height;
+	top: $bg-container-height - $fav-icon-height;
+
+	h4 {
+		font-weight: 700;
+	}
+
+	.mc-fav-icon {
+		height: $fav-icon-height;
+		background-color: $fav-icon-bg;
+		border: 1px solid $fav-icon-bg;
+		border-radius: 99999px;
+		box-shadow: 0 0 10px $fav-icon-bg;
+		position: relative;
+		top: 20px;
+		margin-right: 20px;
+	}
+}
+
+.mc-playerlist {
+	background-color: $playerlist-bg;
+	min-height: 100px;
+	height: 100%;
+	width: 100%;
+
+	.mc-playerlist-status {
+		height: 20%;
+	}
+
+	.mc-playerlist-players {
+		height: 80%;
+		padding: 10px;
+		display: flex;
+		flex-wrap: wrap;
+		overflow: auto hidden;
+
+		span {
+			flex-basis: 25%;
+			flex-grow: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			padding: 0 10px;
+			max-width: 25%;
+
+			img {
+				margin-right: 5px;
+				filter: drop-shadow(5px 5px 5px $avatar-bg-shadow);
+				transition-duration: 0.1s;
+			}
+
+			img:hover {
+				transform: scale($hover-scale-avatar);
+			}
+
+			p {
+				max-width: 100%;
+			}
+		}
+		@media (max-width: $lg) {
+			span {
+				flex-basis: 33%;
+				max-width: 33%;
+			}
+		}
+	}
+}

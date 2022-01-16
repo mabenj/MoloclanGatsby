@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import MainContainer from "./MainContainer";
 import Header from "./Navigation/Header";
 import Footer from "./Navigation/Footer";
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const Layout = ({
+	children,
+	location
+}: {
+	children: React.ReactNode;
+	location: any;
+}) => {
 	return (
 		<>
-			<Header />
+			<Header currentPath={location.pathname} />
 			<MainContainer>
 				<main>{children}</main>
 			</MainContainer>
@@ -14,4 +20,5 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 		</>
 	);
 };
+
 export default Layout;

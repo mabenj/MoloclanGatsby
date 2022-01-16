@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Nav, Navbar } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link as GatsbyLink } from "gatsby";
+import { graphql, Link as GatsbyLink, useStaticQuery } from "gatsby";
 
 import { CloseButton, HamburgerButton } from "../Buttons";
 import { animateCSS } from "../../Utils";
@@ -9,6 +9,8 @@ import { ILinkDefinition } from "./Header";
 
 import WeatherWidget from "../WeatherWidget";
 import Chicken from "../Chicken";
+
+import { GatsbyImage, getImage } from "gatsby-plugin-image";
 
 const NavbarMobile = ({
 	className,
@@ -171,18 +173,27 @@ const MobileNavLink = ({
 };
 
 const Brand = ({ className }: { className?: string }) => {
+	const { file } = useStaticQuery(graphql`
+		query {
+			file(name: { eq: "favicon" }) {
+				childImageSharp {
+					gatsbyImageData(
+						placeholder: BLURRED
+						width: 35
+						layout: FIXED
+						formats: PNG
+					)
+				}
+			}
+		}
+	`);
+	const image = getImage(file);
 	return (
 		<Nav className={className}>
-			<GatsbyLink to="/">
+			<GatsbyLink to="/" style={{ textDecoration: "none" }}>
 				<Navbar.Brand className="navbar-brand">
-					<img
-						src="/favicon-96x96.png"
-						width="35"
-						height="35"
-						className="d-inline-block"
-						alt="MOLO clan logo"
-					/>{" "}
-					molo
+					{image && <GatsbyImage image={image} alt="MOLO Clan logo" />}
+					&nbsp;molo
 				</Navbar.Brand>
 			</GatsbyLink>
 		</Nav>

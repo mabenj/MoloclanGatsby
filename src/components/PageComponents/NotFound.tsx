@@ -1,6 +1,6 @@
 import React from "react";
 import Wrapper from "../Wrapper";
-import LegoManImage from "../../img/404.jpg";
+import LegoManImage from "../../img/misc_images/404.jpg";
 
 export default function NotFound() {
 	return (

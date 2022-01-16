@@ -31,11 +31,15 @@ const linksForMobile: ILinkDefinition[] = linkDefinitions.concat(
 	})
 );
 
-const Header = () => {
+const Header = ({ currentPath }: { currentPath: string }) => {
 	return (
 		<>
 			<NavbarMobile className="d-md-none" links={linksForMobile} />
-			<NavbarDesktop className="d-none d-md-flex" links={linkDefinitions} />
+			<NavbarDesktop
+				className="d-none d-md-flex"
+				links={linkDefinitions}
+				currentPath={currentPath}
+			/>
 		</>
 	);
 };

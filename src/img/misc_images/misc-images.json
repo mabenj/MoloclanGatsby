@@ -1,0 +1,26 @@
+[
+	{
+		"image": "./404.jpg",
+		"description": "Not found 404"
+	},
+	{
+		"image": "./molocraft_dynmap.jpg",
+		"description": "Molocraft dynmap"
+	},
+	{
+		"image": "./molocraft_dynmap2.png",
+		"description": "Molocraft dynmap"
+	},
+	{
+		"image": "./molocraft_render.png",
+		"description": "Molocraft server render"
+	},
+	{
+		"image": "./molo_meme.jpg",
+		"description": "MOLO Clan meme"
+	},
+	{
+		"image": "./veys_ryu.jpg",
+		"description": "Veys_ryu rust painting"
+	}
+]

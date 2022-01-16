@@ -5,7 +5,7 @@ function SEO({
 	description = "",
 	lang = "fi",
 	meta = [],
-	title = "MOLO"
+	title = ""
 }: {
 	description?: string;
 	lang?: string;
@@ -98,7 +98,7 @@ function SEO({
 				lang
 			}}
 			title={title || defaultTitle}
-			titleTemplate={title && defaultTitle ? `%s | ${defaultTitle}` : undefined}
+			titleTemplate={title && defaultTitle ? `${defaultTitle} | %s` : undefined}
 			meta={metaArray}
 		/>
 	);

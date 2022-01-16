@@ -5,29 +5,18 @@ import Gallery, {
 	PhotoProps
 } from "react-photo-gallery";
 import MediaComponent, { IMediaComponentProps } from "./MediaComponent";
-import IExternalMediaSource from "../../MediaSources/IExternalMediaSource";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
-import {
-	getImgurUrl,
-	getYoutubeThumbnailUrl,
-	getYoutubeUrl
-} from "../../Utils";
+import { getYoutubeUrl } from "../../Utils";
 import { useEffect } from "react";
+import IMediaSource from "../../MediaSources/IMediaSource";
+import { IGatsbyImageData } from "gatsby-plugin-image";
 
 const MOBILE_BREAKPOINT = 768;
 
-const THUMBNAILS: { [key: string]: string } = {
-	small: "t",
-	medium: "m",
-	large: "l",
-	huge: "h"
-};
-
 interface IGalleryTilesProps {
-	sourceImages: IExternalMediaSource[];
+	sourceImages: IMediaSource[];
 	onClick: PhotoClickHandler<{}>;
 	direction: "row" | "column";
-	thumbnailSize: "small" | "medium" | "large" | "huge";
 	youtubeAsIframe?: boolean;
 	onLoad: () => void;
 }
@@ -36,8 +25,6 @@ const GalleryTiles = ({
 	sourceImages,
 	onClick,
 	direction,
-	thumbnailSize,
-	youtubeAsIframe = true,
 	onLoad
 }: IGalleryTilesProps) => {
 	const { width: windowWidth } = useWindowDimensions();
@@ -49,7 +36,7 @@ const GalleryTiles = ({
 
 	return (
 		<Gallery
-			photos={formatGalleryMedia(sourceImages, thumbnailSize, youtubeAsIframe)}
+			photos={formatGalleryMedia(sourceImages)}
 			margin={direction === "column" ? 10 : 3}
 			renderImage={RenderImage}
 			onClick={onClick}
@@ -61,10 +48,9 @@ const GalleryTiles = ({
 
 type CustomRenderImageProps = {
 	id?: string;
-	thumbnailSize?: "small" | "medium" | "large" | "huge";
-	provider?: IMediaComponentProps["provider"];
 	type?: IMediaComponentProps["type"];
-	posterSrc?: string;
+	poster?: IGatsbyImageData;
+	gatsbyImage?: IGatsbyImageData;
 };
 
 const RenderImage = <T extends CustomRenderImageProps>({
@@ -78,37 +64,30 @@ const RenderImage = <T extends CustomRenderImageProps>({
 }: RenderImageProps<T>) => {
 	const props: IMediaComponentProps = {
 		src: photo.src,
-		posterSrc: photo.posterSrc,
+		gatsbyImage: photo.gatsbyImage,
+		poster: photo.poster,
 		desc: photo.alt || "",
 		width: photo.width,
 		height: photo.height,
 		id: photo.id || photo.key || photo.src,
-		provider: photo.provider || "imgur",
-		type: photo.type || "jpg",
+		type: photo.type || "image",
 		onClick: (e) => onClick && onClick(e, { index }),
 		direction: direction,
-		thumbnailSize: photo.thumbnailSize,
 		style: { margin, top, left }
 	};
 	return <MediaComponent key={photo.key} {...props} />;
 };
 
 const formatGalleryMedia = (
-	mediaSources: IExternalMediaSource[],
-	thumbnailSize: "small" | "medium" | "large" | "huge",
-	youtubeAsIframe: boolean
+	mediaSources: IMediaSource[]
 ): PhotoProps<CustomRenderImageProps>[] => {
 	return mediaSources.map((media) => {
 		let galleryPhoto: PhotoProps<CustomRenderImageProps> = {
 			// CustomRenderImageProps
 			id: media.id,
-			thumbnailSize: thumbnailSize,
-			provider: media.provider,
-			type:
-				media.provider === "youtube" && !youtubeAsIframe ? "jpg" : media.type,
-			posterSrc: media.posterSrcId
-				? getImgurUrl(media.posterSrcId, THUMBNAILS[thumbnailSize])
-				: undefined,
+			type: media.type,
+			poster: media.poster,
+			gatsbyImage: media.gatsbyImage,
 
 			// PhotoProps
 			src: "",
@@ -117,22 +96,10 @@ const formatGalleryMedia = (
 			alt: media.desc,
 			key: media.id + media.desc
 		};
-		if (media.provider === "youtube") {
-			if (youtubeAsIframe) {
-				galleryPhoto.src = getYoutubeUrl(media.id);
-			} else {
-				galleryPhoto.src = getYoutubeThumbnailUrl(media.id);
-				galleryPhoto.width = 480;
-				galleryPhoto.height = 360;
-			}
-		} else if (media.type === "mp4") {
-			galleryPhoto.src = getImgurUrl(media.id, "", ".mp4");
-		} else {
-			galleryPhoto.src = getImgurUrl(
-				media.id,
-				THUMBNAILS[thumbnailSize],
-				media.type === "png" ? ".png" : ".jpg"
-			);
+		if (media.type === "youtube") {
+			galleryPhoto.src = getYoutubeUrl(media.id);
+			galleryPhoto.width = 480;
+			galleryPhoto.height = 360;
 		}
 		return galleryPhoto;
 	});

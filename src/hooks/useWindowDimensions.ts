@@ -6,6 +6,9 @@ interface IDimensions {
 }
 
 function getWindowDimensions(): IDimensions {
+	if (typeof window === "undefined") {
+		return { width: -1, height: -1 };
+	}
 	const { innerWidth: width, innerHeight: height } = window;
 	return {
 		width,

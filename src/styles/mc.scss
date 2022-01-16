@@ -36,7 +36,7 @@ $sm: 576px;
 }
 
 .mc-bg-container:hover {
-	cursor: pointer;
+	// cursor: pointer;
 
 	.mc-bg-image {
 		transform: scale($hover-scale-bg);
@@ -57,6 +57,9 @@ $sm: 576px;
 	}
 
 	.mc-fav-icon {
+		display: inline-block;
+		position: relative;
+		width: $fav-icon-height;
 		height: $fav-icon-height;
 		background-color: $fav-icon-bg;
 		border: 1px solid $fav-icon-bg;
@@ -65,6 +68,9 @@ $sm: 576px;
 		position: relative;
 		top: 20px;
 		margin-right: 20px;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: cover;
 	}
 }
 

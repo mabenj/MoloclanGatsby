@@ -1,12 +1,11 @@
+import { GatsbyImage } from "gatsby-plugin-image";
 import React, { useEffect, useRef, useState } from "react";
 import Tilty from "react-tilty";
-import IExternalMediaSource from "../../MediaSources/IExternalMediaSource";
+import IMediaSource from "../../MediaSources/IMediaSource";
 
-export interface IMediaComponentProps extends IExternalMediaSource {
+export interface IMediaComponentProps extends IMediaSource {
 	src: string;
 	direction: "row" | "column";
-	posterSrc?: string;
-	thumbnailSize?: "small" | "medium" | "large" | "huge";
 	style?: React.CSSProperties;
 	onClick?: (event: React.MouseEvent) => void | null;
 }
@@ -22,14 +21,13 @@ const MediaComponent = (props: IMediaComponentProps) => {
 	};
 
 	switch (props.type) {
-		case "mp4": {
+		case "video": {
 			return <MediaVideo {...props} style={baseStyle} />;
 		}
-		case "jpg":
-		case "png": {
+		case "image": {
 			return <MediaTiltableImage {...props} style={baseStyle} />;
 		}
-		case "iframe": {
+		case "youtube": {
 			return <MediaIframe {...props} style={baseStyle} />;
 		}
 		default:
@@ -73,7 +71,7 @@ const MediaVideo = (props: IMediaComponentProps) => {
 			<video
 				ref={videoRef}
 				controls
-				poster={props.posterSrc}
+				poster={props.poster?.images.fallback?.src || ""}
 				style={props.style}>
 				<source src={props.src} type="video/mp4" />
 				Your browser does not support the video tag.
@@ -86,14 +84,14 @@ const MediaVideo = (props: IMediaComponentProps) => {
 };
 
 const MediaTiltableImage = (props: IMediaComponentProps) => {
+	if (!props.gatsbyImage) {
+		return null;
+	}
 	return (
 		<Tilty max={25} perspective={1500} speed={1000} className="gallery-tilty">
-			<img
-				src={props.src}
-				alt={props.desc}
-				onClick={props.onClick}
-				style={props.style}
-			/>
+			<div onClick={props.onClick} style={props.style}>
+				<GatsbyImage image={props.gatsbyImage} alt={props.desc} />
+			</div>
 			<div className="gallery-tilty-inner">{props.desc}</div>
 		</Tilty>
 	);

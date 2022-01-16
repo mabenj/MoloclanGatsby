@@ -7,17 +7,9 @@ import { ListGroup } from "react-bootstrap";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import { scrollToElementSmooth } from "../../Utils";
 import { Button } from "react-bootstrap";
-
-import IExternalMediaSource from "../../MediaSources/IExternalMediaSource";
-import rustImagesJson from "../../MediaSources/gallery-rust-sources.json";
-import photoshopImagesJson from "../../MediaSources/gallery-photoshop-sources.json";
-import screenshotImagesJson from "../../MediaSources/gallery-screenshots-sources.json";
-import videosJson from "../../MediaSources/gallery-video-sources.json";
-
-const rustMedia = rustImagesJson as IExternalMediaSource[];
-const photoshopMedia = photoshopImagesJson as IExternalMediaSource[];
-const screenshotsMedia = screenshotImagesJson as IExternalMediaSource[];
-const videosMedia = videosJson as IExternalMediaSource[];
+import { graphql, useStaticQuery } from "gatsby";
+import { getImage, ImageDataLike } from "gatsby-plugin-image";
+import IMediaSource from "../../MediaSources/IMediaSource";
 
 const headerStyle: React.CSSProperties = {
 	display: "flex",
@@ -25,12 +17,94 @@ const headerStyle: React.CSSProperties = {
 	alignItems: "center"
 };
 
+type QueryType = {
+	allGalleryImagesJson: {
+		nodes: QueryNode[];
+	};
+};
+
+type QueryNode = {
+	category: string;
+	id: string;
+	description: string;
+	image: ImageDataLike & {
+		childImageSharp: {
+			original: {
+				width: number;
+				height: number;
+			};
+		};
+	};
+};
+
 export default function Gallery() {
 	const { width } = useWindowDimensions();
 	const isMobile = width < 768;
+	const { allGalleryImagesJson } = useStaticQuery<QueryType>(graphql`
+		query {
+			allGalleryImagesJson {
+				nodes {
+					category
+					id
+					description
+					image {
+						childImageSharp {
+							gatsbyImageData(placeholder: BLURRED, layout: CONSTRAINED)
+							original {
+								height
+								width
+							}
+						}
+					}
+				}
+			}
+		}
+	`);
+	console.log(allGalleryImagesJson);
+	const rustImages = formatMediaSource(
+		allGalleryImagesJson.nodes.filter((node) => node.category === "rust")
+	);
+	const photoshopImages = formatMediaSource(
+		allGalleryImagesJson.nodes.filter((node) => node.category === "photoshop")
+	);
+	const screenshotImages = formatMediaSource(
+		allGalleryImagesJson.nodes.filter((node) => node.category === "screenshots")
+	);
+	const sections: IGallerySectionProps[] = [
+		{
+			header: "Rust-häröilyt",
+			id: "rust",
+			media: rustImages,
+			direction: "row"
+		},
+		{
+			header: "Paint-teokset",
+			id: "photoshop",
+			media: photoshopImages,
+			direction: "row"
+		},
+		{
+			header: "8k Screenshotteja",
+			id: "screenshots",
+			media: screenshotImages,
+			direction: "row"
+		}
+		// {
+		// 	header: "MOLO TV",
+		// 	id: "mtv",
+		// 	media: videosMedia,
+		// 	direction: "column"
+		// }
+	];
 	return (
 		<>
-			<Wrapper>{isMobile ? <MobileHeader /> : <DesktopHeader />}</Wrapper>
+			<Wrapper>
+				{isMobile ? (
+					<MobileHeader sections={sections} />
+				) : (
+					<DesktopHeader sections={sections} />
+				)}
+			</Wrapper>
 			{sections.map((section) => (
 				<Wrapper key={section.id}>
 					<GallerySection {...section} />
@@ -40,7 +114,7 @@ export default function Gallery() {
 	);
 }
 
-const DesktopHeader = () => {
+const DesktopHeader = ({ sections }: { sections: IGallerySectionProps[] }) => {
 	return (
 		<>
 			<div style={headerStyle}>
@@ -63,7 +137,7 @@ const DesktopHeader = () => {
 	);
 };
 
-const MobileHeader = () => {
+const MobileHeader = ({ sections }: { sections: IGallerySectionProps[] }) => {
 	return (
 		<>
 			{" "}
@@ -88,29 +162,19 @@ const MobileHeader = () => {
 	);
 };
 
-const sections: IGallerySectionProps[] = [
-	{
-		header: "Rust-häröilyt",
-		id: "rust",
-		media: rustMedia,
-		direction: "row"
-	},
-	{
-		header: "Paint-teokset",
-		id: "photoshop",
-		media: photoshopMedia,
-		direction: "row"
-	},
-	{
-		header: "8k Screenshotteja",
-		id: "screenshots",
-		media: screenshotsMedia,
-		direction: "row"
-	},
-	{
-		header: "MOLO TV",
-		id: "mtv",
-		media: videosMedia,
-		direction: "column"
-	}
-];
+const formatMediaSource = (
+	nodes: QueryNode[],
+	type: "video" | "image" | "youtube" = "image"
+): IMediaSource[] => {
+	return nodes.map((node) => {
+		const media: IMediaSource = {
+			desc: node.description,
+			id: node.id,
+			type: type,
+			gatsbyImage: getImage(node.image),
+			width: node.image.childImageSharp.original.width,
+			height: node.image.childImageSharp.original.height
+		};
+		return media;
+	});
+};

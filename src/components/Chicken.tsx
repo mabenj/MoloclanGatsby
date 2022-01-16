@@ -53,7 +53,9 @@ const ChickenImg = ({ isFlying }: { isFlying: boolean }) => {
 	});
 
 	const fpsInterval = useRef(1000 / FPS);
-	const then = useRef(window.performance.now());
+	const then = useRef(
+		typeof window !== "undefined" ? window.performance.now() : -1
+	);
 	const paused = useRef(!isFlying);
 
 	const STEP = 3;

@@ -2,39 +2,31 @@ import React from "react";
 import { Row, Col } from "react-bootstrap";
 import MoloLogo from "../MoloLogo/MoloLogo";
 import Wrapper from "../Wrapper";
-import { Link } from "gatsby";
-
-const OfflineRaidMeme = () => (
-	<img
-		className="d-block rounded mx-auto my-5 front-page-image"
-		src="https://i.imgur.com/qT3VtMt.jpg"
-		alt="molo offline raid meme"
-	/>
-);
-
-const RoofCampImage = () => (
-	<div
-		style={{
-			display: "flex",
-			flexDirection: "column",
-			alignItems: "center"
-		}}>
-		<figure>
-			<img
-				className="rounded front-page-image"
-				width="400px"
-				src="https://i.imgur.com/3WC3Ddp.jpg"
-				alt="Roof camper by veys_ryu"
-			/>
-			<figcaption className="text-muted">
-				{/* cSpell: disable */}
-				Kala Harri wipen viimeineisenä päivänä <br />- heinäkuu 2016, väritetty
-			</figcaption>
-		</figure>
-	</div>
-);
+import { graphql, Link, useStaticQuery } from "gatsby";
+import { GatsbyImage, getImage, IGatsbyImageData } from "gatsby-plugin-image";
 
 export default function Home() {
+	const { memeImageJson, veysRyuImageJson } = useStaticQuery(graphql`
+		query {
+			memeImageJson: miscImagesJson(image: { name: { eq: "molo_meme" } }) {
+				image {
+					childImageSharp {
+						gatsbyImageData(placeholder: BLURRED)
+					}
+				}
+			}
+			veysRyuImageJson: miscImagesJson(image: { name: { eq: "veys_ryu" } }) {
+				image {
+					childImageSharp {
+						gatsbyImageData(placeholder: BLURRED)
+					}
+				}
+			}
+		}
+	`);
+	const memeImage = getImage(memeImageJson.image);
+	const veysRyuImage = getImage(veysRyuImageJson.image);
+
 	return (
 		<>
 			<MoloLogo />
@@ -65,12 +57,17 @@ export default function Home() {
 					päivystäminen sekä yleinen härvääminen palvelimen chatissa. Klaanin
 					pelaajakunnan krooninen työttömyys mahdollisti myös kellon ympäri
 					pelaamisen ja sen myötä aamuyön pikkutunneille sijoittuvien{" "}
-					<em>offline</em>-raidien järjestämisen.
+					offline-raidien järjestämisen.
 				</p>
-				<OfflineRaidMeme />
+				<FrontPageImage
+					image={memeImage}
+					alt="Roof camper by veys_ryu"
+					caption="Kuvituskuva offline-raidista"
+					className="my-5"
+				/>
 
 				<Row>
-					<Col lg>
+					<Col lg="7">
 						<p>
 							Sittemmin klaani on lopettanut toimintansa Rustin parissa ja
 							nykyään jatkaa häröilyä TeamSpeak-palvelimen puolella. Palvelimen
@@ -84,7 +81,16 @@ export default function Home() {
 						</p>
 					</Col>
 					<Col lg>
-						<RoofCampImage />
+						<FrontPageImage
+							image={veysRyuImage}
+							alt="Roof camper by veys_ryu"
+							caption={
+								<>
+									Kala Harri wipen viimeineisenä päivänä <br />- heinäkuu 2016,
+									väritetty
+								</>
+							}
+						/>
 					</Col>
 				</Row>
 				{/* cSpell: enable */}
@@ -92,3 +98,36 @@ export default function Home() {
 		</>
 	);
 }
+
+const FrontPageImage = ({
+	image,
+	alt,
+	caption,
+	className
+}: {
+	image: IGatsbyImageData | undefined;
+	alt: string;
+	caption: React.ReactNode;
+	className?: string;
+}) => {
+	return (
+		<div
+			style={{
+				display: "flex",
+				flexDirection: "column",
+				alignItems: "center"
+			}}
+			className={className}>
+			<figure>
+				{image && (
+					<GatsbyImage
+						image={image}
+						alt={alt}
+						className="rounded front-page-image"
+					/>
+				)}
+				<figcaption className="text-muted">{caption}</figcaption>
+			</figure>
+		</div>
+	);
+};

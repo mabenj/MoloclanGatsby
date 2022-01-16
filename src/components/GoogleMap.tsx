@@ -1,5 +1,7 @@
 import React from "react";
 import GoogleMapReact, { Coords } from "google-map-react";
+import { graphql, useStaticQuery } from "gatsby";
+import { GatsbyImage, getImage } from "gatsby-plugin-image";
 
 const mapContainerStyle: React.CSSProperties = {
 	height: "100%",
@@ -24,7 +26,7 @@ const Map = () => {
 	return (
 		<div style={mapContainerStyle}>
 			<GoogleMapReact
-				bootstrapURLKeys={{ key: process.env.REACT_APP_MAPS_API_KEY || "" }}
+				bootstrapURLKeys={{ key: process.env.GATSBY_MAPS_API_KEY || "" }}
 				defaultCenter={defaultCenter}
 				defaultZoom={defaultZoom}>
 				<Marker
@@ -43,17 +45,29 @@ const Map = () => {
 };
 
 const Marker = ({ title }: { title: string; lat: number; lng: number }) => {
+	const { file } = useStaticQuery(graphql`
+		query {
+			file(name: { eq: "favicon" }) {
+				childImageSharp {
+					gatsbyImageData(
+						placeholder: BLURRED
+						width: 40
+						layout: FIXED
+						formats: PNG
+					)
+				}
+			}
+		}
+	`);
+	const image = getImage(file);
 	const imageStyle: React.CSSProperties = {
 		transform: "translate3d(-50%, -50%, 0)",
 		width: "40px"
 	};
 	return (
-		<img
-			src="/favicon-96x96.png"
-			alt={title}
-			title={title}
-			style={imageStyle}
-		/>
+		<div style={imageStyle}>
+			{image && <GatsbyImage image={image} alt={title} title={title} />}
+		</div>
 	);
 };
 

@@ -1,37 +1,24 @@
 import React from "react";
 import FsLightbox from "fslightbox-react";
-import IExternalMediaSource from "../../MediaSources/IExternalMediaSource";
-import { getImgurUrl, getYoutubeUrl } from "../../Utils";
+import { getYoutubeUrl } from "../../Utils";
 import { isOpera, isEdge, isChrome, isChromium } from "react-device-detect";
+import IMediaSource from "../../MediaSources/IMediaSource";
+import { GatsbyImage } from "gatsby-plugin-image";
 
 const HAS_BACKDROP_FILTER_BUG = isOpera || isEdge || isChrome || isChromium;
 
 interface ILightboxProps {
 	toggler: boolean;
-	sourceMedias: IExternalMediaSource[];
+	sourceMedias: IMediaSource[];
 	index: number;
-	enableCustomSources?: boolean;
 	customSourceNodes?: JSX.Element[] | undefined;
 }
 
-const Lightbox = ({
-	toggler,
-	sourceMedias,
-	index,
-	enableCustomSources = false
-}: ILightboxProps) => {
+const Lightbox = ({ toggler, sourceMedias, index }: ILightboxProps) => {
 	return (
 		<FsLightbox
 			toggler={toggler}
-			sources={formatLightboxMedia(sourceMedias)}
-			customSources={
-				enableCustomSources
-					? formatLightboxCustomMedia(sourceMedias)
-					: undefined
-			}
-			types={sourceMedias.map((media) =>
-				media.provider === "youtube" ? "youtube" : "image"
-			)}
+			sources={formatLightboxmMedia(sourceMedias)}
 			sourceIndex={index}
 			onClose={HAS_BACKDROP_FILTER_BUG ? addBackDropBlur : undefined}
 			onOpen={HAS_BACKDROP_FILTER_BUG ? hideBackDropBlur : undefined}
@@ -40,22 +27,9 @@ const Lightbox = ({
 	);
 };
 
-const formatLightboxMedia = (
-	mediaSources: IExternalMediaSource[]
-): string[] => {
+const formatLightboxmMedia = (mediaSources: IMediaSource[]): JSX.Element[] => {
 	return mediaSources.map((media) => {
-		return media.provider === "youtube"
-			? getYoutubeUrl(media.id)
-			: getImgurUrl(media.id);
-	});
-};
-
-const formatLightboxCustomMedia = (
-	mediaSources: IExternalMediaSource[]
-): JSX.Element[] => {
-	return mediaSources
-		.filter((media) => media.provider === "youtube")
-		.map((media) => {
+		if (media.type === "youtube") {
 			return (
 				<iframe
 					src={getYoutubeUrl(media.id)}
@@ -67,7 +41,15 @@ const formatLightboxCustomMedia = (
 					allowFullScreen
 				/>
 			);
-		});
+		}
+		return (
+			<div>
+				{media.gatsbyImage && (
+					<GatsbyImage image={media.gatsbyImage} alt={media.desc} />
+				)}
+			</div>
+		);
+	});
 };
 
 function addBackDropBlur() {

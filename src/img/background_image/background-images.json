@@ -1,0 +1,18 @@
+[
+	{
+		"image": "./rust_banner_nofade.jpg",
+		"description": "Rust banner no-fade"
+	},
+	{
+		"image": "./rust_banner.jpg",
+		"description": "Rust banner"
+	},
+	{
+		"image": "./rust_banner.png",
+		"description": "Rust banner"
+	},
+	{
+		"image": "./rust_banner.svg",
+		"description": "Rust banner"
+	}
+]

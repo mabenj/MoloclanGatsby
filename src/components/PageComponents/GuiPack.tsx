@@ -2,29 +2,16 @@ import React from "react";
 import Wrapper from "../Wrapper";
 import { Row, Col } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import imageSources from "../../MediaSources/gui-pack-images-sources.json";
 import GallerySection from "../Gallery/GallerySection";
 import { graphql, useStaticQuery } from "gatsby";
 import IImageSource from "../../MediaSources/IMediaSource";
-import { getImage } from "gatsby-plugin-image";
-
-// const images = imageSources as IExternalMediaSource[];
+import { GatsbyImage, getImage } from "gatsby-plugin-image";
 
 const DL_LINK =
 	"https://drive.google.com/uc?export=download&id=1XtGaMgX7xDzrKSGYGvLHWIMSIVJZHdBs";
 
-const GuiPackIcon = () => {
-	return (
-		<img
-			src="https://i.imgur.com/GQOoX1c.png"
-			alt="GUI-pack icon"
-			className="d-block mx-auto"
-		/>
-	);
-};
-
 export default function GuiPack() {
-	const { imagesJson } = useStaticQuery(graphql`
+	const { imagesJson, iconJson } = useStaticQuery(graphql`
 		query {
 			imagesJson: allGuiPackImagesJson {
 				nodes {
@@ -41,6 +28,14 @@ export default function GuiPack() {
 					}
 				}
 			}
+			iconJson: miscImagesJson(image: { name: { eq: "gui_pack_icon" } }) {
+				description
+				image {
+					childImageSharp {
+						gatsbyImageData(placeholder: BLURRED, layout: FIXED)
+					}
+				}
+			}
 		}
 	`);
 	const images: IImageSource[] = imagesJson.nodes.map((node: any) => {
@@ -54,6 +49,7 @@ export default function GuiPack() {
 		};
 		return img;
 	});
+	const icon = getImage(iconJson.image);
 	return (
 		<Wrapper>
 			<h1>GUI-Pack</h1>
@@ -78,7 +74,13 @@ export default function GuiPack() {
 					</p>
 				</Col>
 				<Col md={3}>
-					<GuiPackIcon />
+					{icon && (
+						<GatsbyImage
+							image={icon}
+							alt={iconJson.description}
+							className="d-block mx-auto"
+						/>
+					)}
 				</Col>
 			</Row>
 			<Row className="mt-5">

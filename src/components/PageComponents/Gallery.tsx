@@ -5,7 +5,7 @@ import GallerySection, {
 } from "../../components/Gallery/GallerySection";
 import { ListGroup } from "react-bootstrap";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
-import { scrollToElementSmooth } from "../../Utils";
+import { getImgurUrl, getYoutubeUrl, scrollToElementSmooth } from "../../Utils";
 import { Button } from "react-bootstrap";
 import { graphql, useStaticQuery } from "gatsby";
 import { getImage, ImageDataLike } from "gatsby-plugin-image";
@@ -19,11 +19,14 @@ const headerStyle: React.CSSProperties = {
 
 type QueryType = {
 	allGalleryImagesJson: {
-		nodes: QueryNode[];
+		nodes: ImageNode[];
+	};
+	allGalleryVideosJson: {
+		nodes: VideoNode[];
 	};
 };
 
-type QueryNode = {
+type ImageNode = {
 	category: string;
 	id: string;
 	description: string;
@@ -37,39 +40,69 @@ type QueryNode = {
 	};
 };
 
+type VideoNode = {
+	id: string;
+	height: number;
+	description: string;
+	width: number;
+	type: "video" | "youtube";
+	videoId: string;
+	posterImage?: ImageDataLike;
+};
+
 export default function Gallery() {
 	const { width } = useWindowDimensions();
 	const isMobile = width < 768;
-	const { allGalleryImagesJson } = useStaticQuery<QueryType>(graphql`
-		query {
-			allGalleryImagesJson {
-				nodes {
-					category
-					id
-					description
-					image {
-						childImageSharp {
-							gatsbyImageData(placeholder: BLURRED, layout: CONSTRAINED)
-							original {
-								height
-								width
+	const { allGalleryImagesJson, allGalleryVideosJson } =
+		useStaticQuery<QueryType>(graphql`
+			query {
+				allGalleryImagesJson {
+					nodes {
+						category
+						id
+						description
+						image {
+							childImageSharp {
+								gatsbyImageData(
+									placeholder: BLURRED
+									layout: CONSTRAINED
+									quality: 90
+								)
+								original {
+									height
+									width
+								}
+							}
+						}
+					}
+				}
+				allGalleryVideosJson {
+					nodes {
+						id
+						height
+						description
+						width
+						type
+						videoId
+						posterImage {
+							childImageSharp {
+								gatsbyImageData(placeholder: BLURRED, layout: CONSTRAINED)
 							}
 						}
 					}
 				}
 			}
-		}
-	`);
-	console.log(allGalleryImagesJson);
-	const rustImages = formatMediaSource(
+		`);
+	const rustImages = formatImages(
 		allGalleryImagesJson.nodes.filter((node) => node.category === "rust")
 	);
-	const photoshopImages = formatMediaSource(
+	const photoshopImages = formatImages(
 		allGalleryImagesJson.nodes.filter((node) => node.category === "photoshop")
 	);
-	const screenshotImages = formatMediaSource(
+	const screenshotImages = formatImages(
 		allGalleryImagesJson.nodes.filter((node) => node.category === "screenshots")
 	);
+	const videos = formatVideos(allGalleryVideosJson.nodes);
 	const sections: IGallerySectionProps[] = [
 		{
 			header: "Rust-häröilyt",
@@ -88,13 +121,13 @@ export default function Gallery() {
 			id: "screenshots",
 			media: screenshotImages,
 			direction: "row"
+		},
+		{
+			header: "MOLO TV",
+			id: "mtv",
+			media: videos,
+			direction: "column"
 		}
-		// {
-		// 	header: "MOLO TV",
-		// 	id: "mtv",
-		// 	media: videosMedia,
-		// 	direction: "column"
-		// }
 	];
 	return (
 		<>
@@ -162,15 +195,12 @@ const MobileHeader = ({ sections }: { sections: IGallerySectionProps[] }) => {
 	);
 };
 
-const formatMediaSource = (
-	nodes: QueryNode[],
-	type: "video" | "image" | "youtube" = "image"
-): IMediaSource[] => {
+const formatImages = (nodes: ImageNode[]): IMediaSource[] => {
 	return nodes.map((node) => {
 		const media: IMediaSource = {
 			desc: node.description,
 			id: node.id,
-			type: type,
+			type: "image",
 			gatsbyImage: getImage(node.image),
 			width: node.image.childImageSharp.original.width,
 			height: node.image.childImageSharp.original.height
@@ -178,3 +208,20 @@ const formatMediaSource = (
 		return media;
 	});
 };
+function formatVideos(nodes: VideoNode[]): IMediaSource[] {
+	return nodes.map((node) => {
+		const media: IMediaSource = {
+			desc: node.description,
+			id: node.id,
+			type: node.type,
+			width: node.width,
+			height: node.height,
+			videoSrc:
+				node.type === "video"
+					? getImgurUrl(node.videoId, "", ".mp4")
+					: getYoutubeUrl(node.videoId),
+			poster: node.posterImage && getImage(node.posterImage)
+		};
+		return media;
+	});
+}

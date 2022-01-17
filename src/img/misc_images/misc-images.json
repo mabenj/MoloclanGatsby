@@ -22,5 +22,17 @@
 	{
 		"image": "./veys_ryu.jpg",
 		"description": "Veys_ryu rust painting"
+	},
+	{
+		"image": "./jari_keihas.jpg",
+		"description": "Jari heittää keihästä"
+	},
+	{
+		"image": "./jari_pantomiimi.jpg",
+		"description": "Jarin pantomiimiesitys"
+	},
+	{
+		"image": "./gui_pack_icon.png",
+		"description": "GUI Pack icon"
 	}
 ]

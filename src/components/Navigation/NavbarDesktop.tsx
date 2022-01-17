@@ -3,7 +3,8 @@ import { Row, Col, Nav, Navbar } from "react-bootstrap";
 import Sidebar from "./Sidebar";
 import Chicken from "../Chicken";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { graphql, Link as GatsbyLink, useStaticQuery } from "gatsby";
+import { graphql, useStaticQuery } from "gatsby";
+import Link from "../Link";
 
 import { ILinkDefinition } from "./Header";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
@@ -48,12 +49,12 @@ const Navigation = ({
 	return (
 		<div className="navigation-bar-middle">
 			<Brand className="navigation-brand" />
-			<Links
+			<NavigationLinks
 				className="navigation-links d-none d-md-flex"
 				links={links}
 				currentPath={currentPath}
 			/>
-			<Links
+			<NavigationLinks
 				className="navigation-links d-md-none flex-column"
 				links={links}
 				currentPath={currentPath}
@@ -80,17 +81,17 @@ const Brand = ({ className }: { className?: string }) => {
 	const image = getImage(file);
 	return (
 		<Nav className={className}>
-			<GatsbyLink to="/" style={{ textDecoration: "none" }}>
+			<Link to="/" style={{ textDecoration: "none" }}>
 				<Navbar.Brand className="navbar-brand">
 					{image && <GatsbyImage image={image} alt="MOLO Clan logo" />}
 					&nbsp;molo
 				</Navbar.Brand>
-			</GatsbyLink>
+			</Link>
 		</Nav>
 	);
 };
 
-const Links = ({
+const NavigationLinks = ({
 	className,
 	links,
 	currentPath
@@ -102,13 +103,17 @@ const Links = ({
 	return (
 		<Nav className={className}>
 			{links.map((link) => (
-				<Link key={link.to} linkDefinition={link} currentPath={currentPath} />
+				<NavigationLink
+					key={link.to}
+					linkDefinition={link}
+					currentPath={currentPath}
+				/>
 			))}
 		</Nav>
 	);
 };
 
-const Link = ({
+const NavigationLink = ({
 	linkDefinition,
 	currentPath
 }: {
@@ -121,7 +126,7 @@ const Link = ({
 		currentPath && currentPath.toLowerCase() === to.toLowerCase();
 	return (
 		<div className="dropdown">
-			<GatsbyLink
+			<Link
 				activeClassName="active"
 				to={to}
 				className={`navigation-link dropdown-button`}
@@ -134,17 +139,17 @@ const Link = ({
 						icon="caret-down"
 					/>
 				)}
-			</GatsbyLink>
+			</Link>
 			{hasSubLinks && (
 				<div className="dropdown-content">
 					<ul className="list-unstyled">
 						{subLinks?.map(({ displayName, hash }, index) => (
 							<li key={hash} className="hvr-bounce-to-right">
-								<GatsbyLink
+								<Link
 									to={`${to}#${hash}`}
 									className={index !== 0 ? "" : `first`}>
 									{displayName}
-								</GatsbyLink>
+								</Link>
 							</li>
 						))}
 					</ul>

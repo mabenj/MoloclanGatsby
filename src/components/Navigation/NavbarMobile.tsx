@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Nav, Navbar } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { graphql, Link as GatsbyLink, useStaticQuery } from "gatsby";
+import { graphql, useStaticQuery } from "gatsby";
 
 import { CloseButton, HamburgerButton } from "../Buttons";
 import { animateCSS } from "../../Utils";
@@ -11,6 +11,7 @@ import WeatherWidget from "../WeatherWidget";
 import Chicken from "../Chicken";
 
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
+import Link from "../Link";
 
 const NavbarMobile = ({
 	className,
@@ -133,7 +134,7 @@ const MobileNavLink = ({
 		<span className="px-4">
 			<span className="nav-bar-mobile-link">
 				<span className="nav-bar-mobile-link-header">
-					<GatsbyLink
+					<Link
 						to={link.to}
 						target={link.target}
 						className={`py-4 pl-3 text-color w-${hasSubLinks ? "75" : "100"}`}
@@ -141,7 +142,7 @@ const MobileNavLink = ({
 						<h5 className="px-2 d-inline-block" style={linkHeaderStyle}>
 							{link.displayName}
 						</h5>
-					</GatsbyLink>
+					</Link>
 					{hasSubLinks ? (
 						<div
 							className="py-4 pr-3 w-25"
@@ -158,11 +159,11 @@ const MobileNavLink = ({
 					<ul className="list-unstyled" onClick={handleClick}>
 						{link.subLinks?.map((subLink) => (
 							<li key={link.to + subLink.hash} className="pl-4 py-3">
-								<GatsbyLink
+								<Link
 									to={`${link.to}#${subLink.hash}`}
 									className="text-color d-inline-block w-100">
 									{subLink.displayName}
-								</GatsbyLink>
+								</Link>
 							</li>
 						))}
 					</ul>
@@ -190,12 +191,12 @@ const Brand = ({ className }: { className?: string }) => {
 	const image = getImage(file);
 	return (
 		<Nav className={className}>
-			<GatsbyLink to="/" style={{ textDecoration: "none" }}>
+			<Link to="/" style={{ textDecoration: "none" }}>
 				<Navbar.Brand className="navbar-brand">
 					{image && <GatsbyImage image={image} alt="MOLO Clan logo" />}
 					&nbsp;molo
 				</Navbar.Brand>
-			</GatsbyLink>
+			</Link>
 		</Nav>
 	);
 };

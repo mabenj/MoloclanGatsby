@@ -3,9 +3,9 @@ import { useState, useRef, useEffect } from "react";
 import WeatherWidget from "../WeatherWidget";
 import { HamburgerButton, CloseButton } from "../Buttons";
 import { animateCSS } from "../../Utils";
-import { Link as GatsbyLink } from "gatsby";
 
 import sidebarLinkDefinitions from "./sidebar-link-definitions.json";
+import Link from "../Link";
 
 export interface ISidebarLink {
 	displayName: string;
@@ -87,13 +87,13 @@ const SidebarContent = ({ links }: { links: ISidebarLink[] }) => {
 				</li>
 				{links.map(({ displayName, pathname, target = "_self" }) => (
 					<li key={pathname}>
-						<GatsbyLink
+						<Link
 							to={pathname}
 							className="hvr-bounce-to-right navigation-link"
 							target={target}
 							rel="noreferrer">
 							{displayName}
-						</GatsbyLink>
+						</Link>
 					</li>
 				))}
 			</ul>

@@ -6,6 +6,7 @@ export default interface IMediaSource {
 	width: number;
 	height: number;
 	type: "video" | "youtube" | "image";
+	videoSrc?: string;
 	gatsbyImage?: IGatsbyImageData | undefined;
 	poster?: IGatsbyImageData | undefined;
 }

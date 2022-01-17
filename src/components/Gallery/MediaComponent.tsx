@@ -1,4 +1,4 @@
-import { GatsbyImage } from "gatsby-plugin-image";
+import { GatsbyImage, getSrc } from "gatsby-plugin-image";
 import React, { useEffect, useRef, useState } from "react";
 import Tilty from "react-tilty";
 import IMediaSource from "../../MediaSources/IMediaSource";
@@ -71,7 +71,7 @@ const MediaVideo = (props: IMediaComponentProps) => {
 			<video
 				ref={videoRef}
 				controls
-				poster={props.poster?.images.fallback?.src || ""}
+				poster={(props.poster && getSrc(props.poster)) || ""}
 				style={props.style}>
 				<source src={props.src} type="video/mp4" />
 				Your browser does not support the video tag.

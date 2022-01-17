@@ -96,10 +96,8 @@ const formatGalleryMedia = (
 			alt: media.desc,
 			key: media.id + media.desc
 		};
-		if (media.type === "youtube") {
-			galleryPhoto.src = getYoutubeUrl(media.id);
-			galleryPhoto.width = 480;
-			galleryPhoto.height = 360;
+		if (media.type === "youtube" || media.type === "video") {
+			galleryPhoto.src = media.videoSrc || "";
 		}
 		return galleryPhoto;
 	});

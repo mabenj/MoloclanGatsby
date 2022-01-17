@@ -1,103 +1,91 @@
 [
 	{
 		"id": "MwPGvPh8ZHs",
-		"provider": "youtube",
-		"type": "iframe",
+		"type": "youtube",
 		"desc": "CSGO Cache perseilyt squekyssä",
 		"width": 16,
 		"height": 9
 	},
 	{
 		"id": "5EZ0YiB",
-		"provider": "imgur",
-		"type": "mp4",
-		"posterSrcId": "Ns4xiRh",
+		"type": "video",
+		"posterId": "./posters/5EZ0YiB.png",
 		"desc": "Kerge panee miinoja",
 		"width": 16,
 		"height": 9
 	},
 	{
 		"id": "T4A3dZR",
-		"provider": "imgur",
-		"type": "mp4",
+		"type": "video",
 		"desc": "Jaria koijataan",
 		"width": 9,
 		"height": 16
 	},
 	{
 		"id": "wFzinKA",
-		"provider": "imgur",
-		"type": "mp4",
+		"type": "video",
 		"desc": "Cat vibing to kake",
 		"width": 16,
 		"height": 9
 	},
 	{
 		"id": "5gIgFw8",
-		"provider": "imgur",
-		"type": "mp4",
+		"type": "video",
 		"desc": "\"nice cock\"",
 		"width": 16,
 		"height": 9
 	},
 	{
 		"id": "hGCUiKO",
-		"provider": "imgur",
-		"type": "mp4",
-		"posterSrcId": "bSkbVqr",
+		"type": "video",
+		"posterId": "./posters/hGCUiKO.png",
 		"desc": "Pituushyppyä",
 		"width": 16,
 		"height": 9
 	},
 	{
 		"id": "BJjyLe2",
-		"provider": "imgur",
-		"type": "mp4",
-		"posterSrcId": "8x0ODzy",
+		"type": "video",
+		"posterId": "./posters/BJjyLe2.png",
 		"desc": "Suklaatehdas",
 		"width": 16,
 		"height": 9
 	},
 	{
 		"id": "GRIrZXB",
-		"provider": "imgur",
-		"type": "mp4",
-		"posterSrcId": "Ou5viVk",
+		"type": "video",
+		"posterId": "./posters/GRIrZXB.png",
 		"desc": "Mini coopperi lähtee",
 		"width": 16,
 		"height": 9
 	},
 	{
 		"id": "kDr35iH",
-		"provider": "imgur",
-		"type": "mp4",
-		"posterSrcId": "acoqL4V",
+		"type": "video",
+		"posterId": "./posters/kDr35iH.png",
 		"desc": "Lentsikka lähtee",
 		"width": 16,
 		"height": 9
 	},
 	{
 		"id": "iENVfR3",
-		"provider": "imgur",
-		"type": "mp4",
-		"posterSrcId": "P7IgQXY",
+		"type": "video",
+		"posterId": "./posters/iENVfR3.png",
 		"desc": "Ronaldo painaa saksarin",
 		"width": 16,
 		"height": 9
 	},
 	{
 		"id": "uElgAcu",
-		"provider": "imgur",
-		"type": "mp4",
-		"posterSrcId": "gDDF7YJ",
+		"type": "video",
+		"posterId": "./posters/uElgAcu.png",
 		"desc": "Vessa",
 		"width": 16,
 		"height": 9
 	},
 	{
 		"id": "uY2cxhT",
-		"provider": "imgur",
-		"type": "mp4",
+		"type": "video",
 		"desc": "Spaddu",
 		"width": 9,
 		"height": 16

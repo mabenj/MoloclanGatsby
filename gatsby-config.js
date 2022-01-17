@@ -29,6 +29,13 @@ module.exports = {
 				path: `${__dirname}/src/img/`
 			}
 		},
+		{
+			resolve: `gatsby-source-filesystem`,
+			options: {
+				name: `videos`,
+				path: `${__dirname}/src/video/`
+			}
+		},
 		`gatsby-plugin-image`,
 		`gatsby-plugin-sharp`,
 		`gatsby-plugin-react-helmet`,

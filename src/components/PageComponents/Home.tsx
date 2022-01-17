@@ -2,8 +2,9 @@ import React from "react";
 import { Row, Col } from "react-bootstrap";
 import MoloLogo from "../MoloLogo/MoloLogo";
 import Wrapper from "../Wrapper";
-import { graphql, Link, useStaticQuery } from "gatsby";
+import { graphql, useStaticQuery } from "gatsby";
 import { GatsbyImage, getImage, IGatsbyImageData } from "gatsby-plugin-image";
+import Link from "../Link";
 
 export default function Home() {
 	const { memeImageJson, veysRyuImageJson } = useStaticQuery(graphql`
